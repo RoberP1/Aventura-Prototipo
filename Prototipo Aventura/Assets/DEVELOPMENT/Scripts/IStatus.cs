@@ -19,12 +19,13 @@ public class IStatus : MonoBehaviour
     {
         _input = GetComponent<StarterAssetsInputs>();
         ticksManager = FindObjectOfType<TicksManager>();
+        ActualizarTick();
     }
     private void Update()
     {
         
         
-        ActualizarTick();
+        
 
 
 
@@ -42,24 +43,24 @@ public class IStatus : MonoBehaviour
 
     private void ReducirSed(float thirstTick)
     {
-        if (thirst > 0) thirst -= 1 / thirstTick;
+        if (thirst > 0) thirst -= thirstMax / thirstTick;
     }
 
     private void ReducirHambre(float hungerTick)
     {
-        if (hunger > 0) hunger -= 1 / hungerTick;
+        if (hunger > 0) hunger -= hungerMax / hungerTick;
     }
 
     private void UpdateEnergia(float energyTick)
     {
-        if (energy <= energyMax && energy >= 0) energy += 1 / energyTick;
+        if (energy <= energyMax && energy >= 0) energy += energyMax / energyTick;
         if (energy < 0) energy = 0;
         if (energy > energyMax) energy = energyMax;
     }
 
     private void AumentarVida(float healthTick)
     {
-        if (health < healthMax) health += 1 / healthTick;
+        if (health < healthMax) health += healthMax / healthTick;
         if (health >= healthMax) health = healthMax;
     }
     private void TimeTickSystem_OnTick(object sender, TicksManager.OnTickEventArgs e)
