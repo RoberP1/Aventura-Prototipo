@@ -26,6 +26,7 @@ public class Interaction : MonoBehaviour
         inventory = GetComponent<IInventory>();
         _input = GetComponent<StarterAssetsInputs>();
         ticksManager = FindObjectOfType<TicksManager>();
+        TicksManager.OnTick += TimeTickSystem_OnTick;
     }
 
     // Update is called once per frame
@@ -53,10 +54,10 @@ public class Interaction : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             
-            if (hotbar.Omano == null && Physics.Raycast(raycastPos, camera.transform.forward, out hit, 4, LayerMask.GetMask("Resources")))
+            if (hotbar.Omano == null && Canattack &&Physics.Raycast(raycastPos, camera.transform.forward, out hit, 4, LayerMask.GetMask("Resources")))
             {
                 hit.collider.gameObject.GetComponentInParent<Recurso>().RecibirDamage(10);
-                CDAttack();
+                CDAttack(15);
                 //print(hit.collider);
             }
             else if(hotbar.Omano != null)
@@ -75,22 +76,22 @@ public class Interaction : MonoBehaviour
                     hotbar.RemovePared();
 
                 }
-                if (hotbar.Omano.GetComponent<IObject>().name == hotbar.OEspada.GetComponent<IObject>().name && Physics.Raycast(raycastPos, camera.transform.forward, out hit, 6f, LayerMask.GetMask("Resources")))
+                if (hotbar.Omano.GetComponent<IObject>().name == hotbar.OEspada.GetComponent<IObject>().name && Canattack && Physics.Raycast(raycastPos, camera.transform.forward, out hit, 6f, LayerMask.GetMask("Resources")))
                 {
-                    hit.collider.gameObject.GetComponentInParent<Recurso>().RecibirDamage(20);
-                    CDAttack();
+                    hit.collider.gameObject.GetComponentInParent<Recurso>().RecibirDamage(30);
+                    CDAttack(15);
                     //print(hit.collider);
                 }
-                if (hotbar.Omano.GetComponent<IObject>().name == hotbar.OHacha.GetComponent<IObject>().name && Physics.Raycast(raycastPos, camera.transform.forward, out hit, 4f, LayerMask.GetMask("Resources")))
+                if (hotbar.Omano.GetComponent<IObject>().name == hotbar.OHacha.GetComponent<IObject>().name && Canattack && Physics.Raycast(raycastPos, camera.transform.forward, out hit, 4f, LayerMask.GetMask("Resources")))
                 {
                     hit.collider.gameObject.GetComponentInParent<Recurso>().RecibirDamage(50);
-                    CDAttack();
+                    CDAttack(25);
                     //print(hit.collider);
                 }
-                if (hotbar.Omano.GetComponent<IObject>().name == hotbar.OLanza.GetComponent<IObject>().name && Physics.Raycast(raycastPos, camera.transform.forward, out hit, 10f, LayerMask.GetMask("Resources")))
+                if (hotbar.Omano.GetComponent<IObject>().name == hotbar.OLanza.GetComponent<IObject>().name && Canattack && Physics.Raycast(raycastPos, camera.transform.forward, out hit, 10f, LayerMask.GetMask("Resources")))
                 {
                     hit.collider.gameObject.GetComponentInParent<Recurso>().RecibirDamage(20);
-                    CDAttack();
+                    CDAttack(10);
                     //print(hit.collider);
                 }
                 
@@ -98,10 +99,11 @@ public class Interaction : MonoBehaviour
         }
     }
 
-    private void CDAttack()
+    private void CDAttack(int ticks)
     {
         Canattack = false;
-        TicksManager.OnTick += TimeTickSystem_OnTick;
+        
+        attackCDMax = ticks;
     }
 
     private void TimeTickSystem_OnTick(object sender,TicksManager.OnTickEventArgs e)

@@ -10,21 +10,24 @@ public class TicksManager : MonoBehaviour
         public int tick;
     }
     public static event EventHandler<OnTickEventArgs> OnTick;
-    [Range(0f,10000)]public float TickPerSeconds;
+    [Range(0, 10000)] public float TicksPerSec;
+    public float TickTimerMax = 0.1f;
     public int tick;
     private float tickTimer;
     void Awake()
     {
+        
         tick = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
+        TickTimerMax = 1 / TicksPerSec;
         tickTimer += Time.deltaTime;
-        if (tickTimer >= (1/TickPerSeconds))
+        if (tickTimer >= TickTimerMax)
         {
-            tickTimer -= (1 / TickPerSeconds);
+            tickTimer -= TickTimerMax;
             tick++;
             if (OnTick != null) OnTick(this, new OnTickEventArgs { tick = tick });
         }
